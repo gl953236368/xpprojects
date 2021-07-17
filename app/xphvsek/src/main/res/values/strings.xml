@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">只狼1.4Demo</string>
+    <string name="xposed_description">只狼1.4版本 支持android7以下的</string>
+    <string name="button_content">开启</string>
+    <string name="text_content">实现计算 a^2 + b^2 的值</string>
+</resources>

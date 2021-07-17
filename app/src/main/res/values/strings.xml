@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">xpprojects</string>
+    <string name="xposed_description">xposed测试sekiro</string>
+</resources>

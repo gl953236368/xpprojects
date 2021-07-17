@@ -1,0 +1,4 @@
+include ':app:xphvsek'
+include ':app:xplvsek'
+include ':app'
+rootProject.name = "xpprojects"

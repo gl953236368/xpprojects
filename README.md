@@ -1,7 +1,7 @@
 # xpprojects
 * 关于xposed+sekiro 的安卓端demo；
 * 实现xposed通过http主动rpc调用方法的demo；
-* 原项目：https://github.com/virjar/sekiro
+* 框架地址：https://github.com/virjar/sekiro
 
 ## xplvsk 
 低版本的sekiro1.0.1的和xposed配合

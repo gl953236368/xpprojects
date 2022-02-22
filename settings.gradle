@@ -1,3 +1,4 @@
+include ':app:xpinline'
 include ':app:xphvsek'
 include ':app:xplvsek'
 include ':app'

@@ -5,6 +5,7 @@ import android.icu.text.TimeZoneFormat;
 import android.util.Log;
 
 import com.px.xphvsek.config.BuildConfig;
+import com.px.xphvsek.handler.SignHandler;
 import com.virjar.sekiro.business.api.SekiroClient;
 import com.virjar.sekiro.business.api.fastjson.JSONObject;
 import com.virjar.sekiro.business.api.interfaze.ActionHandler;
@@ -23,6 +24,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 public class TestDemo {
     public static final String TAG = "HOOK_TESTDEMO";
+    public static ClassLoader currentClassloader = null;
 
     public static void entity(XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
         // 当前正在运行的process 包名 和 加载的 package 是否相同
@@ -30,9 +32,11 @@ public class TestDemo {
             // 调用 hookmethod
             Log.d(TAG, "调用客户端");
             ClassLoader classLoader = loadPackageParam.classLoader;
-            initSekiroClient(classLoader);
+//            initSekiroClient(classLoader);
+            initSekiroClient();
         }
     }
+
     public static String getSign(ClassLoader classLoader, int args1, int args2)throws Throwable{
         Log.d(TAG, "主动捕获方法");
         // 定位 class
@@ -50,6 +54,8 @@ public class TestDemo {
         String serverHost = BuildConfig.HOST;
         int serverPort = BuildConfig.PORT;
         String actionName = "test";
+
+        currentClassloader = classLoader;
 
         new SekiroClient(groupName, clientId, serverHost, serverPort)
                 .setupSekiroRequestInitializer((sekiroRequest, handlerRegistry) -> {
@@ -80,5 +86,27 @@ public class TestDemo {
                     });
 
                 }).start();
+    }
+
+    /**
+     * 外部注册handler
+     */
+    public static void initSekiroClient(){
+        // 基础配置 组名/客户端id/服务器ip/服务器port/拦截的action
+        String groupName = "TestDemo";
+        String clientId = UUID.randomUUID().toString();
+        String serverHost = BuildConfig.HOST;
+        int serverPort = BuildConfig.PORT;
+
+        SekiroClient sekiroClient = new SekiroClient(groupName, clientId, serverHost, serverPort);
+
+        sekiroClient.setupSekiroRequestInitializer(new SekiroRequestInitializer() {
+            @Override
+            public void onSekiroRequest(SekiroRequest sekiroRequest, HandlerRegistry handlerRegistry) {
+                 handlerRegistry.registerSekiroHandler(new SignHandler());
+            }
+        });
+
+        sekiroClient.start();
     }
 }
